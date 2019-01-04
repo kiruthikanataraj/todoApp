@@ -1,35 +1,55 @@
-import { TestBed, async } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
+import { inject, TestBed } from '@angular/core/testing';
+import { AppService, TodoItem } from './app-service';
 
-describe('AppComponent', () => {
-  beforeEach(async(() => {
+
+describe('Machine Files Service', () => {
+  let service: AppService;
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
+      providers: [AppService]
+    });
+  });
+
+  beforeEach(inject([AppService], (injectedService: AppService) => {
+    service = injectedService;
   }));
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+  it('creates the service using injection', () => {
+    expect(service).toBeTruthy();
+  });
+  const item: TodoItem = { itemName: 'Complete Assignment', completed: false, editable: false };
+  const item1: TodoItem = { itemName: 'Go to hospital', completed: false, editable: false };
+
+  describe('check Add todoItem', () => {
+    it('should return zero', () => {
+      expect(service.todoItem.length).toBe(0);
+    });
+    it('should return one', () => {
+
+      service.todoItem.push(item);
+      expect(service.todoItem.length).toBe(1);
+
+    });
+
   });
 
-  it(`should have as title 'todo-app'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('todo-app');
+  describe('check delete todoItem', () => {
+
+
+    it('should return zero', () => {
+      service.deleteItem(item);
+      expect(service.todoItem.length).toBe(0);
+
+    });
+    it('should return one', () => {
+
+      service.todoItem.push(item);
+      expect(service.todoItem.length).toBe(1);
+
+    });
+
   });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to todo-app!');
-  });
+
 });
+
